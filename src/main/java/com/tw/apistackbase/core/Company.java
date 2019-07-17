@@ -1,9 +1,42 @@
 package com.tw.apistackbase.core;
 
-public class Company {
-    private Long id;
+import org.hibernate.annotations.DynamicInsert;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "company")
+@DynamicInsert(true)
+public class Company {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(name = "name")
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profileID")
+    private Profile profile;
+    @OneToMany(cascade=CascadeType.ALL)
+    //@JoinColumn(name="employeeId")
+    private List<Employee> employees;
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
     public Long getId() {
         return id;
